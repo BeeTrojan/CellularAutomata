@@ -34,7 +34,7 @@ public class Seed {
 
             }
             else{
-                i=i-1;
+                --i;
             }
         }
         return tab;

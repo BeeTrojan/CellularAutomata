@@ -1,11 +1,11 @@
 package sample;
 
 public class Cell {
-    private int id;
+//    private int id;
 
     public Cell(){
 
-        id=0;
+  //      id=0;
 
     }
 

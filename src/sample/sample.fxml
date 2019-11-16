@@ -8,12 +8,12 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-   <children>
+     <children>
       <TextField layoutX="1086.0" layoutY="14.0" prefHeight="31.0" prefWidth="100.0" fx:id="x" />
       <TextField fx:id="y" layoutX="1086.0" layoutY="45.0" prefHeight="31.0" prefWidth="100.0" />
       <TextField fx:id="seedinuput" layoutX="1086.0" layoutY="114.0" prefHeight="31.0" prefWidth="100.0" />
-      <Button layoutX="1104.0" layoutY="76.0" mnemonicParsing="false" onAction="#size" text="Button" />
-      <Button layoutX="1104.0" layoutY="145.0" mnemonicParsing="false" onAction="#seed" text="Button" />
+      <Button layoutX="1104.0" layoutY="76.0" mnemonicParsing="false" onAction="#size" text="Space" />
+      <Button layoutX="1094.0" layoutY="145.0" mnemonicParsing="false" onAction="#seed" text="Generate" />
       <BorderPane layoutX="14.0" layoutY="14.0" style="-fx-border-color: BLACK;">
          <center>
             <Canvas fx:id="pane" height="500.0" width="500.0">
@@ -22,6 +22,9 @@
                </BorderPane.margin></Canvas>
          </center>
       </BorderPane>
-      <Button layoutX="1104.0" layoutY="193.0" mnemonicParsing="false" onAction="#grain" text="Button" />
+      <Button layoutX="1089.0" layoutY="195.0" mnemonicParsing="false" onAction="#grain" text="GrainGrow" />
+      <Button layoutX="1044.0" layoutY="250.0" mnemonicParsing="false" onAction="#save" prefHeight="31.0" prefWidth="91.0" text="Save" />
+      <Button layoutX="1141.0" layoutY="250.0" mnemonicParsing="false" onAction="#loadimage" prefHeight="31.0" prefWidth="91.0" text="Load" />
+      <Button layoutX="1060.0" layoutY="311.0" mnemonicParsing="false" onAction="#loadtxt" text="LoadString" />
    </children>
 </AnchorPane>

@@ -50,6 +50,11 @@ public class GrainGrow {
                 }
                 tab = cloneArr(tmpTab);
             }
+//save to txt
+
+
+
+
 
                 return tab;
     }
