@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,18 +25,25 @@ public class Controller {
     private TextField y;
     @FXML
     private TextField seedinuput;
+    @FXML
+    private TextField number;
+    @FXML
+    private TextField rd;
+
 
     @FXML
     private Canvas pane;
     private final int cSize = 1;
-    private Map<Integer,Color>    colors = new HashMap<>();
+    private Map<Integer,Color>    colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);}};
     private int[][] tab;
-
+    private FileChooser fileChooser;
     int xSize;
     int ySize;
 
     int seed;
-
+    int inclusions;
+    int r;
+    int type;
   //  private Pane space;
 
     public void size(){
@@ -60,7 +68,7 @@ public class Controller {
 
         pane.setWidth(xSize * cSize);
         pane.setHeight(ySize * cSize);
-
+        tab = new int[ySize][xSize];
     }
 
      public void grain(){
@@ -70,7 +78,22 @@ public class Controller {
 
     }
 
+    public void square(){
+        inclusions=Integer.parseInt(number.getText());
+        r=Integer.parseInt(rd.getText());
+        type=1;
+        tab = new Inclusions(xSize,ySize,inclusions,tab,r,type).generator();
+        draw();
 
+    }
+
+    public void circle(){
+        inclusions=Integer.parseInt(number.getText());
+        r=Integer.parseInt(rd.getText());
+        type=0;
+        tab = new Inclusions(xSize,ySize,inclusions,tab,r,type).generator();
+        draw();
+    }
 
 
     void draw() {
@@ -83,7 +106,7 @@ public class Controller {
         for (int i =0; i < ySize; i++){
             for (int j =0; j < xSize; j++) {
                 if(tab[i][j] != 0){
-                   if(colors.size() < seed && !colors.containsKey(tab[i][j])) {
+                   if(!colors.containsKey(tab[i][j])) {
                        Color color = Color.rgb(rand.nextInt(256),(rand.nextInt(256))*(i+1) %256,((i+1)*(1+j))%256);
                        gc.setFill(color);
                        colors.put(tab[i][j], color);
@@ -101,7 +124,13 @@ public class Controller {
 
 
     public void save(){
-        InputOutput.save(tab);
+        initializeFileChooserBmp();
+
+
+
+        File file = fileChooser.showSaveDialog(pane.getScene().getWindow());
+
+
         WritableImage wim = new WritableImage((int)pane.getWidth(), (int)pane.getHeight());
 
 
@@ -113,7 +142,7 @@ public class Controller {
                 bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
         newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0,null);
         try {
-            ImageIO.write(newBufferedImage, "BMP",  new File("test.bmp"));
+            ImageIO.write(newBufferedImage, "BMP",  (file));
 
           //  byte[] res  = s.toByteArray();
          //   s.close(); //especially if you are using a different output stream.
@@ -126,10 +155,16 @@ public class Controller {
 
     }
 
+    public void saveString(){
+        initializeFileChooserTxt();
+        File file = fileChooser.showSaveDialog(pane.getScene().getWindow());
+        InputOutput.save(tab,file);
+    }
+
     public void seed(){
 
         seed=Integer.parseInt(seedinuput.getText());
-        tab = new Seed(xSize,ySize,seed).generator();
+        tab = new Seed(xSize,ySize,seed,tab).generator();
         draw();
 
 
@@ -137,14 +172,16 @@ public class Controller {
 
 
     public void loadimage() {
+        initializeFileChooserBmp();
+        File file = fileChooser.showOpenDialog(pane.getScene().getWindow());
         try {
             List<Integer> colorMap = new ArrayList<>();
-            BufferedImage bi =  ImageIO.read(new File("test.bmp"));
+            BufferedImage bi =  ImageIO.read(file);
             tab = new int[ bi.getHeight()][bi.getWidth()];
             pane.setWidth(bi.getWidth());
             pane.setHeight(bi.getHeight());
-            xSize = bi.getWidth()/cSize;
-            ySize = bi.getHeight()/cSize;
+            xSize = bi.getWidth();
+            ySize = bi.getHeight();
 
             for(int y=0; y< bi.getHeight();++y){
                 for(int x=0; x< bi.getWidth();++x) {
@@ -164,13 +201,14 @@ public class Controller {
     }
 
     public void loadtxt(){
-
-        tab = InputOutput.loadTxt("save");
+        initializeFileChooserTxt();
+        File file = fileChooser.showOpenDialog(pane.getScene().getWindow());
+        tab = InputOutput.loadTxt(file);
         pane.setWidth(tab.length);
         pane.setHeight(tab[0].length);
         xSize =tab[0].length;
         ySize = tab.length;
-        colors = new HashMap<>();
+        colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);}};
         seed = getMaxValue(tab);
         draw();
     }
@@ -196,6 +234,22 @@ public class Controller {
         return Color.rgb(red,green,blue);
     }
 
+    private void initializeFileChooserBmp() {
+
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("BMP", "*.bmp"));
+        fileChooser.setInitialDirectory(new File("."));
+    }
+
+    private void initializeFileChooserTxt() {
+
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("TXT", "*.txt"));
+        fileChooser.setInitialDirectory(new File("."));
+    }
 
 
 }
+

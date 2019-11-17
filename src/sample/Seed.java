@@ -9,15 +9,15 @@ public class Seed {
     private int seeds;
 
 
-    public Seed(int xSize, int ySize, int seeds) {
+    public Seed(int xSize, int ySize, int seeds,int[][] tab) {
         this.ySize = ySize;
         this.xSize = xSize;
         this.seeds = seeds;
+        this.tab=tab;
     }
 
     int[][] generator(){
 
-        tab = new int[ySize][xSize];
 
         Random rand_x = new Random();
         Random rand_y = new Random();
@@ -40,9 +40,6 @@ public class Seed {
         return tab;
     }
 
-    public static void main(String[] args) {
-        Seed s = new Seed(10,5,10);
-    }
 
 
 }

@@ -46,13 +46,13 @@ public class InputOutput {
 
     }
 
-    public static void save(int[][] tab)
+    public static void save(int[][] tab, File saveString)
     {
         String str =convertArrayToString(tab);
 
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter("save"));
+            writer = new BufferedWriter(new FileWriter(saveString));
 
             writer.write(str);
 
@@ -65,9 +65,9 @@ public class InputOutput {
     }
 
 
-    public static int[][] loadTxt(String filename){
+    public static int[][] loadTxt(File file){
         try {
-            return  convertStringToArray( new Scanner(new File(filename)).useDelimiter("\\Z").next());
+            return  convertStringToArray( new Scanner((file)).useDelimiter("\\Z").next());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -16,7 +16,7 @@ public class GrainGrow {
     private int findN(int x, int y){
        List<Integer> n =
                Stream.of(a(x-1,y-1),a(x,y-1),a(x+1,y-1),a(x-1,y),a(x+1,y),a(x-1,y+1),a(x,y+1),a(x+1,y+1))
-                       .filter(v->v!=null && v !=0).collect(Collectors.toList());
+                       .filter(v->v!=null && v !=0 && v!=-1).collect(Collectors.toList());
        if(n.size()==0) return 0;
         Map<Integer,Integer> occurences = new HashMap<>();
         n.forEach(v->occurences.compute(v,(key,occ)->occ!=null ? occ + 1 : 1));
@@ -76,11 +76,12 @@ public class GrainGrow {
         return target;
     }
 
-    public static void main(String[] args) {
-        Seed s = new Seed(10,5,25);
-        GrainGrow g = new GrainGrow(s.generator());
-        g.grain();
-    }
+//    public static void main(String[] args) {
+//        Seed s = new Seed(10,5,25);
+//        GrainGrow g = new GrainGrow(s.generator());
+//        g.grain();
+//    }
 
 
 }
+
