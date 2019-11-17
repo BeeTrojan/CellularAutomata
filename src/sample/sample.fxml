@@ -16,7 +16,7 @@
          <Button layoutX="970.0" layoutY="76.0" mnemonicParsing="false" onAction="#size" text="Space" />
          <Button layoutX="961.0" layoutY="145.0" mnemonicParsing="false" onAction="#seed" text="Generate" />
 
-         <Button layoutX="957.0" layoutY="194.0" mnemonicParsing="false" onAction="#grain" text="GrainGrow" />
+         <Button layoutX="908.0" layoutY="207.0" mnemonicParsing="false" onAction="#grain" text="GrainGrow" />
 
          <Button layoutX="902.0" layoutY="250.0" mnemonicParsing="false" onAction="#save" prefHeight="31.0" prefWidth="91.0" text="Save" />
          <Button layoutX="999.0" layoutY="250.0" mnemonicParsing="false" onAction="#loadimage" prefHeight="31.0" prefWidth="91.0" text="Load" />
@@ -29,7 +29,10 @@
 
          <Button layoutX="935.0" layoutY="404.0" mnemonicParsing="false" onAction="#square" text="Square" />
          <Button layoutX="1019.0" layoutY="404.0" mnemonicParsing="false" onAction="#circle" text="Circle" />
+         
+         <Button layoutX="1005.0" layoutY="207.0" mnemonicParsing="false" onAction="#grain2" text="GrainGrow2" />
 
+         <TextField fx:id="percent" layoutX="995.0" layoutY="182.0" prefHeight="25.0" prefWidth="100.0" />
 
       <BorderPane layoutX="14.0" layoutY="14.0" style="-fx-border-color: BLACK;">
          <center>
@@ -39,6 +42,7 @@
                </BorderPane.margin></Canvas>
          </center>
       </BorderPane>
+
 
 
    </children>

@@ -29,7 +29,8 @@ public class Controller {
     private TextField number;
     @FXML
     private TextField rd;
-
+    @FXML
+    private TextField percent;
 
     @FXML
     private Canvas pane;
@@ -44,6 +45,7 @@ public class Controller {
     int inclusions;
     int r;
     int type;
+    int percentInt;
   //  private Pane space;
 
     public void size(){
@@ -71,9 +73,16 @@ public class Controller {
         tab = new int[ySize][xSize];
     }
 
-     public void grain(){
+    public void grain(){
         GrainGrow g = new GrainGrow(tab);
         tab = g.grain();
+        draw();
+
+    }
+    public void grain2(){
+        percentInt=Integer.parseInt(percent.getText());
+        GrainGrow g = new GrainGrow(tab,percentInt);
+        tab = g.grainMoore2();
         draw();
 
     }
