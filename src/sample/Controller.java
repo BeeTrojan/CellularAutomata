@@ -31,11 +31,17 @@ public class Controller {
     private TextField rd;
     @FXML
     private TextField percent;
+    @FXML
+    private TextField boardSize;
+    @FXML
+    private TextField jgb;
+    @FXML
+    private TextField iteration;
 
     @FXML
     private Canvas pane;
     private final int cSize = 1;
-    private Map<Integer,Color>    colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);}};
+    private Map<Integer,Color>    colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);}};
     private int[][] tab;
     private FileChooser fileChooser;
     int xSize;
@@ -46,6 +52,7 @@ public class Controller {
     int r;
     int type;
     int percentInt;
+    int iter;
   //  private Pane space;
 
     public void size(){
@@ -86,6 +93,32 @@ public class Controller {
         draw();
 
     }
+    public void MonteCarloGrain(){
+        iter=Integer.parseInt(iteration.getText());
+       tab = new MonteCarlo(tab,iter).grainGrowMC();
+       draw();
+
+    }
+
+    public void border(){
+        r=Integer.parseInt(boardSize.getText());
+        tab = new Inclusions(xSize,ySize,inclusions,tab,r,type).grain();
+        draw();
+
+    }
+
+    public void clear(){
+        for (int i =0; i < ySize; i++){
+            for (int j =0; j < xSize; j++){
+                if(tab[i][j]!= -1){
+                    tab[i][j]=0;
+                }
+            }
+        }
+        seed=0;
+        colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);}};
+        draw();
+    }
 
     public void square(){
         inclusions=Integer.parseInt(number.getText());
@@ -114,16 +147,15 @@ public class Controller {
 
         for (int i =0; i < ySize; i++){
             for (int j =0; j < xSize; j++) {
-                if(tab[i][j] != 0){
                    if(!colors.containsKey(tab[i][j])) {
-                       Color color = Color.rgb(rand.nextInt(256),(rand.nextInt(256))*(i+1) %256,((i+1)*(1+j))%256);
+                       Color color = Color.rgb(rand.nextInt(100),(rand.nextInt(256)),rand.nextInt(256));
                        gc.setFill(color);
                        colors.put(tab[i][j], color);
                    }else{
                        gc.setFill(colors.get(tab[i][j]));
                    }
                    gc.fillRect(j * cSize, i * cSize, cSize, cSize);
-                }
+
 
             }
         }
@@ -177,6 +209,12 @@ public class Controller {
         draw();
 
 
+    }
+
+    public void GenerateMC(){
+        seed=Integer.parseInt(seedinuput.getText());
+        tab = new Seed(xSize,ySize,seed,tab).generatorMC();
+        draw();
     }
 
 

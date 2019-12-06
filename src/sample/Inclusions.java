@@ -37,7 +37,7 @@ public class Inclusions {
 
             if (tab[y][x] == 0 || isOnBorder(x,y)) {
                 if (type == 0) {
-                    fillCircle(y,x,r);                }
+                    fillCircle(y,x,r,tab);                }
                 else if (type==1){
                     fillSquare(y,x,r);
                 }
@@ -55,7 +55,7 @@ private boolean isInCircle(int r, int y,int x){
         return (x*x) +y*y <= r*r;
 }
 
-public int[][] fillCircle(int y,int x,int r) {
+public void fillCircle(int y,int x,int r,int[][] tab) {
     for (int i = y - r; i <= y + r; i++) {
         for (int j = x-r; j<= x+r;j++){
             if (isInCircle(r,Math.abs(y-i),Math.abs(x-j)) && ySize> i &&i>=0 &&j>=0 &&xSize>j){
@@ -63,10 +63,10 @@ public int[][] fillCircle(int y,int x,int r) {
             }
         }
     }
-    return tab;
+
 }
 
-    public int[][] fillSquare(int y,int x,int r) {
+    public void fillSquare(int y,int x,int r) {
         for (int i = y - r; i <= y + r; i++) {
             for (int j = x-r; j<= x+r;j++){
                 if (ySize> i &&i>=0 &&j>=0 &&xSize>j){
@@ -74,7 +74,7 @@ public int[][] fillCircle(int y,int x,int r) {
                 }
             }
         }
-        return tab;
+
     }
 
     private boolean isOnBorder(int x , int y){
@@ -84,6 +84,32 @@ public int[][] fillCircle(int y,int x,int r) {
         Map<Integer,Integer> occurences = new HashMap<>();
         n.forEach(v->occurences.compute(v,(key,occ)->occ!=null ? occ + 1 : 1));
         return occurences.size() >1;
+    }
+
+
+
+
+    public int[][] grain(){
+        int[][] tmpTab = cloneArr(tab);
+            for (int i = 0; i < tab.length; i++) {
+                for (int j = 0; j < tab[0].length; j++) {
+                    if (isOnBorder(j,i)) {
+                        fillCircle(i,j,r,tmpTab);
+                    }
+                }
+
+            tab = cloneArr(tmpTab);
+        }
+        return tab;
+    }
+
+    public static int[][] cloneArr(int[][] src) {
+        int length = src.length;
+        int[][] target = new int[length][src[0].length];
+        for (int i = 0; i < length; i++) {
+            System.arraycopy(src[i], 0, target[i], 0, src[i].length);
+        }
+        return target;
     }
 
     private Integer a(int x,int y){

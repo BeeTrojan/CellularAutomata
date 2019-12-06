@@ -76,6 +76,7 @@ public class GrainGrow {
     public int[][] grain(){
             int[][] tmpTab = new int[tab.length][tab[0].length];
             boolean wasZero = true;
+            int f = -1000;
             while(wasZero) {
                 wasZero = false;
                tmpTab = cloneArr(tab);
@@ -83,10 +84,13 @@ public class GrainGrow {
                     for (int j = 0; j < tab[0].length; j++) {
                         if (tab[i][j] == 0) {
                             tmpTab[i][j] = findM(j,i);
+                            if(findM(j,i)!=0)
                             wasZero = true;
                         }
+
                     }
                 }
+                ++f;
                 tab = cloneArr(tmpTab);
             }
                 return tab;
