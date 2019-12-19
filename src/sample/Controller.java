@@ -6,6 +6,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Controller {
 
@@ -37,23 +40,37 @@ public class Controller {
     private TextField jgb;
     @FXML
     private TextField iteration;
+    private Set<Integer> colorsNotClear = new HashSet();
+    @FXML
+    private TextField hetero;
+    @FXML
+    private TextField homo;
 
     @FXML
     private Canvas pane;
     private final int cSize = 1;
-    private Map<Integer,Color>    colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);}};
+    private Map<Integer,Color>    colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);put(-2,Color.RED);}};
     private int[][] tab;
+    private int [][] ener;
     private FileChooser fileChooser;
     int xSize;
     int ySize;
-
+    boolean energy;
     int seed;
     int inclusions;
     int r;
     int type;
     int percentInt;
     int iter;
+    int homos;
+    int heteros;
   //  private Pane space;
+
+
+    @FXML
+    public void initialize(){
+
+    }
 
     public void size(){
 
@@ -106,17 +123,43 @@ public class Controller {
         draw();
 
     }
+    public void selectedB(){
+        r = Integer.parseInt(boardSize.getText());
+        for (int i =0; i < ySize; i++) {
+            for (int j = 0; j < xSize; j++) {
+                if (colorsNotClear.contains(tab[i][j]))
+                tab = new Inclusions(xSize, ySize, tab, r,i,j ).grainOne();
+            }
+        }
+        draw();
+
+    }
 
     public void clear(){
         for (int i =0; i < ySize; i++){
             for (int j =0; j < xSize; j++){
-                if(tab[i][j]!= -1){
+                if(tab[i][j] !=0 && tab[i][j]!=-1){
                     tab[i][j]=0;
                 }
             }
         }
         seed=0;
         colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);}};
+        colorsNotClear.clear();
+        draw();
+    }
+
+    public void clearAll(){
+        for (int i =0; i < ySize; i++){
+            for (int j =0; j < xSize; j++){
+                if(tab[i][j] !=0){
+                    tab[i][j]=0;
+                }
+            }
+        }
+        seed=0;
+        colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);}};
+        colorsNotClear.clear();
         draw();
     }
 
@@ -137,7 +180,107 @@ public class Controller {
         draw();
     }
 
+  public void convasClick(MouseEvent me){
 
+      System.out.println(me.getX() - pane.getLayoutX());
+      System.out.println(me.getY() - pane.getLayoutY());
+      int x = (int) (me.getX() - pane.getLayoutX());
+      int y = (int) (me.getY() - pane.getLayoutY());
+      int  color = tab[y][x];
+      if(colorsNotClear.contains(color)){
+          colorsNotClear.remove(color);
+      }else{
+              colorsNotClear.add(color);
+          }
+
+
+         }
+
+      public void dualPhase(){
+          for (int i =0; i < ySize; i++){
+              for (int j =0; j < xSize; j++){
+                  if(colorsNotClear.contains(tab[i][j])) {
+                      tab[i][j] = -2;
+                  }
+
+                  else if (tab[i][j]>0)
+                       tab[i][j]=0;
+
+              }
+          }
+            seed=0;
+            colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);put(-2,Color.RED);}};
+            colorsNotClear.clear();
+        draw();
+  }
+  public void substructure(){
+      for (int i =0; i < ySize; i++){
+          for (int j =0; j < xSize; j++){
+              if(colorsNotClear.contains(tab[i][j]) && tab[i][j] > 0) {
+                  tab[i][j] = -tab[i][j]-1;
+              }
+
+              else if(tab[i][j] > 0){
+                  tab[i][j]=0;
+              }
+          }
+      }
+    //  colorsNotClear.clear();
+      colors = new HashMap<Integer,Color>(){{put(-1,Color.BLACK);put(0,Color.WHITE);}};
+      seed=0;
+      draw();
+
+
+  }
+
+    public void homo(){
+        GraphicsContext gc = pane.getGraphicsContext2D();
+        homos=Integer.parseInt(homo.getText());
+        for (int i =0; i < ySize; i++){
+            for (int j =0; j < xSize; j++){
+                gc.setFill(Color.rgb(0,0,homos));
+                gc.fillRect(i,j,1,1);
+            }
+        }
+        }
+    private boolean isOnBorder(int x , int y){
+        List<Integer> n =
+                Stream.of(a(x-1,y-1),a(x,y-1),a(x+1,y-1),a(x-1,y),a(x+1,y),a(x-1,y+1),a(x,y+1),a(x+1,y+1))
+                        .filter(v->v!=null && v!=-1).collect(Collectors.toList());
+        Map<Integer,Integer> occurences = new HashMap<>();
+        n.forEach(v->occurences.compute(v,(key,occ)->occ!=null ? occ + 1 : 1));
+        return occurences.size() >1;
+    }
+    private Integer a(int x,int y){
+        if(x<0) return null;
+        if(y<0) return null;
+        if(x>=tab[0].length) return null;
+        if(y>=tab.length) return null;
+        return tab[y][x];
+
+    }
+    public void hetero(){
+        GraphicsContext gc = pane.getGraphicsContext2D();
+        ener = new int[ySize][xSize];
+        homos=Integer.parseInt(homo.getText());
+        heteros=Integer.parseInt(hetero.getText());
+        for (int i =0; i < ySize; i++){
+            for (int j =0; j < xSize; j++){
+                if((isOnBorder(j,i)))
+                gc.setFill(Color.rgb(0,0,heteros));
+                else{
+                    gc.setFill(Color.rgb(0,0,homos));
+                }
+                gc.fillRect(i,j,1,1);
+
+            }
+        }
+
+    }
+    public void setEnergy(){
+
+            draw();
+    }
     void draw() {
 
         GraphicsContext gc = pane.getGraphicsContext2D();
@@ -148,7 +291,7 @@ public class Controller {
         for (int i =0; i < ySize; i++){
             for (int j =0; j < xSize; j++) {
                    if(!colors.containsKey(tab[i][j])) {
-                       Color color = Color.rgb(rand.nextInt(100),(rand.nextInt(256)),rand.nextInt(256));
+                       Color color = Color.rgb((rand.nextInt(100)),(rand.nextInt(256)),rand.nextInt(256));
                        gc.setFill(color);
                        colors.put(tab[i][j], color);
                    }else{

@@ -45,7 +45,7 @@ public class Seed {
 
         for (int i = 0; i < ySize; i++) {
             for (int j = 0; j < xSize; j++) {
-                if(tab[i][j]!=-1)
+                if(tab[i][j]>-1)
                 tab[i][j] = rand.nextInt(seeds)+1;
             }
 

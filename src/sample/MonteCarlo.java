@@ -29,7 +29,7 @@ public class MonteCarlo {
         int color = tab[x][y];
         return
                 Stream.of(a(x - 1, y - 1), a(x, y - 1), a(x + 1, y - 1), a(x - 1, y), a(x + 1, y), a(x - 1, y + 1), a(x, y + 1), a(x + 1, y + 1))
-                        .filter(v -> v != null && v != 0 && v != -1 && v != color).count();
+                        .filter(v -> v != null && v>0 && v != color).count();
 
     }
 
@@ -37,7 +37,7 @@ public class MonteCarlo {
 
         for (int i = 0; i < iteration; i++) {
             mc();
-            tab = cloneArr(tTab);
+          //  tab = cloneArr(tTab);
 
         }
         return tab;
@@ -48,10 +48,10 @@ public class MonteCarlo {
         Random rand_x = new Random();
         List<Point> toVisit = new ArrayList<>();
 
-        tTab = cloneArr(tab);
+
         for (int i = 0; i < tab.length; i++) {
             for (int j = 0; j < tab[0].length; j++) {
-                if(tab[i][j]!=-1)
+                if(tab[i][j] > -1)
                 toVisit.add(new Point(i, j));
             }
         }
@@ -79,9 +79,9 @@ public class MonteCarlo {
         int rn = random.nextInt(n.size());
         Point randomN = n.get(rn > 0 ? rn : 0);
         int p = tab[x][y];
-        tTab[x][y] = tab[randomN.x][randomN.y];
+        tab[x][y] = tab[randomN.x][randomN.y];
         if (xD <= countN(randomN.x, randomN.y)) {
-            tTab[x][y] = p;
+            tab[x][y] = p;
         }
 
 
@@ -91,7 +91,7 @@ public class MonteCarlo {
         int color = tab[x][y];
         return
                 Stream.of(new Point(x - 1, y - 1), new Point(x, y - 1), new Point(x + 1, y - 1), new Point(x - 1, y), new Point(x + 1, y), new Point(x - 1, y + 1), new Point(x, y + 1), new Point(x + 1, y + 1))
-                        .filter(v -> b(v) && tab[v.x][v.y] != color && tab[v.x][v.y] != -1).collect(Collectors.toList());
+                        .filter(v -> b(v) && tab[v.x][v.y] != color && tab[v.x][v.y] >-1).collect(Collectors.toList());
     }
 
 

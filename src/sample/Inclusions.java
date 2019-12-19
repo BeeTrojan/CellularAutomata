@@ -15,6 +15,8 @@ public class Inclusions {
     private int seeds;
     private int r;
     private int type;
+    private int x;
+    private int y;
 
     public Inclusions(int xSize, int ySize, int seeds,int[][] tab,int r,int type) {
         this.ySize = ySize;
@@ -23,6 +25,16 @@ public class Inclusions {
         this.tab=tab;
         this.r=r;
         this.type=type;
+    }
+    public Inclusions(int xSize, int ySize,int[][] tab,int r,int x,int y) {
+        this.ySize = ySize;
+        this.xSize = xSize;
+       // this.seeds = seeds;
+        this.tab=tab;
+        this.r=r;
+        this.x=x;
+        this.y=y;
+
     }
 
     int[][] generator(){
@@ -80,14 +92,19 @@ public void fillCircle(int y,int x,int r,int[][] tab) {
     private boolean isOnBorder(int x , int y){
         List<Integer> n =
                 Stream.of(a(x-1,y-1),a(x,y-1),a(x+1,y-1),a(x-1,y),a(x+1,y),a(x-1,y+1),a(x,y+1),a(x+1,y+1))
-                        .filter(v->v!=null && v !=0 && v!=-1).collect(Collectors.toList());
+                        .filter(v->v!=null && v!=-1).collect(Collectors.toList());
         Map<Integer,Integer> occurences = new HashMap<>();
         n.forEach(v->occurences.compute(v,(key,occ)->occ!=null ? occ + 1 : 1));
         return occurences.size() >1;
     }
 
 
-
+    public int[][] grainOne(){
+        if(isOnBorder(y,x)){
+            fillCircle(x,y,r,tab);
+        }
+        return tab;
+    }
 
     public int[][] grain(){
         int[][] tmpTab = cloneArr(tab);

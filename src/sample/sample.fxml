@@ -34,24 +34,41 @@
 
          <TextField fx:id="percent" layoutX="995.0" layoutY="182.0" prefHeight="25.0" prefWidth="100.0" promptText="\% to normal grain" />
 
-         <Button layoutX="976.0" layoutY="481.0" mnemonicParsing="false" onAction="#border" text="Boarder" />
+         <Button layoutX="933.0" layoutY="481.0" mnemonicParsing="false" onAction="#border" text="Boarder" />
+         <Button layoutX="1012.0" layoutY="481.0" mnemonicParsing="false" onAction="#selectedB" text="SelectedB" />
          <TextField fx:id="boardSize" layoutX="931.0" layoutY="456.0" promptText="border size" />
-         <Button layoutX="981.0" layoutY="516.0" mnemonicParsing="false" onAction="#clear" text="Clear" />
+         <Button layoutX="940.0" layoutY="516.0" mnemonicParsing="false" onAction="#clear" text="Clear" />
+         <Button layoutX="1026.0" layoutY="516.0" mnemonicParsing="false" onAction="#clearAll" text="ClearAll" />
 
          <Button layoutX="1000.0" layoutY="145.0" mnemonicParsing="false" onAction="#GenerateMC" prefHeight="25.0" prefWidth="91.0" text="GenerateMC" />
          <TextField fx:id="jgb" layoutX="1107.0" layoutY="182.0" prefHeight="25.0" prefWidth="79.0" promptText="jgb" />
          <Button layoutX="1107.0" layoutY="207.0" mnemonicParsing="false" onAction="#MonteCarloGrain" text="MonteCarlo" />
          <TextField fx:id="iteration" layoutX="1110.0" layoutY="157.0" prefHeight="25.0" prefWidth="73.0" promptText="iter" />
 
+         <Button layoutX="934.0" layoutY="561.0" mnemonicParsing="false" onAction="#dualPhase" text="DualPhase" />
+         <Button layoutX="1010.0" layoutY="561.0" mnemonicParsing="false" onAction="#substructure" text="Substructure" />
+
+         <TextField fx:id="hetero" layoutX="920.0" layoutY="603.0" prefHeight="25.0" prefWidth="84.0" />
+         <TextField fx:id="homo" layoutX="1032.0" layoutY="603.0" prefHeight="25.0" prefWidth="84.0" />
+
+         <Button layoutX="1048.0" layoutY="636.0" mnemonicParsing="false" onAction="#homo" text="homo" />
+         <Button layoutX="940.0" layoutY="636.0" mnemonicParsing="false" onAction="#hetero" text="hetero" />
+         <Button layoutX="978.0" layoutY="668.0" mnemonicParsing="false" onAction="#setEnergy" text="setEnergy" />
+
          <BorderPane layoutX="14.0" layoutY="14.0" style="-fx-border-color: BLACK;">
 
          <center>
-            <Canvas fx:id="pane" height="500.0" width="500.0">
+            <Canvas fx:id="pane" height="500.0" onMouseClicked="#convasClick" width="500.0">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin></Canvas>
          </center>
       </BorderPane>
+
+
+
+
+
 
 
 
